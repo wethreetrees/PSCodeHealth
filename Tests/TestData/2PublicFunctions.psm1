@@ -27,7 +27,7 @@ Function Get-Nothing {
     Takes the content of the file File.txt as input and does nothing.
 #>
     [CmdletBinding()]
-    
+
     Param(
         [Parameter(Mandatory,Position=0,ValueFromPipeline=$True)]
         [PSObject[]]$InputObject,
@@ -67,7 +67,7 @@ Function Set-Nothing {
     Takes the content of the file File.txt as input and sets nothing to 42.
 #>
     [CmdletBinding()]
-    
+
     Param(
         [Parameter(Mandatory,Position=0,ValueFromPipeline=$True)]
         [PSObject[]]$InputObject,
