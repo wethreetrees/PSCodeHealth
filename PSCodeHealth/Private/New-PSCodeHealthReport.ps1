@@ -8,11 +8,11 @@ Function New-PSCodeHealthReport {
     The value of the TestsPath parameter specifies the location of the tests when calling Pester to generate test coverage information.
 
 .PARAMETER ReportTitle
-    To specify the title of the health report.  
+    To specify the title of the health report.
     This is mainly used when generating an HTML report.
 
 .PARAMETER AnalyzedPath
-    To specify the code path being analyzed.  
+    To specify the code path being analyzed.
     This corresponds to the original Path value of Invoke-PSCodeHealth.
 
 .PARAMETER Path
@@ -26,14 +26,14 @@ Function New-PSCodeHealthReport {
     If a directory is specified, the directory and all subdirectories will be searched recursively for tests.
 
 .PARAMETER TestsResult
-    To use an existing Pester tests result object for generating the following metrics :  
-      - NumberOfTests  
-      - NumberOfFailedTests  
-      - FailedTestsDetails  
-      - NumberOfPassedTests  
-      - TestsPassRate (%)  
-      - TestCoverage (%)  
-      - CommandsMissedTotal  
+    To use an existing Pester tests result object for generating the following metrics :
+      - NumberOfTests
+      - NumberOfFailedTests
+      - FailedTestsDetails
+      - NumberOfPassedTests
+      - TestsPassRate (%)
+      - TestCoverage (%)
+      - CommandsMissedTotal
 
 .EXAMPLE
     PS C:\> New-PSCodeHealthReport -ReportTitle 'MyTitle' -AnalyzedPath 'C:\Folder' -Path $MyPath -FunctionHealthRecord $FunctionHealthRecords -TestsPath "$MyPath\Tests"
@@ -44,7 +44,7 @@ Function New-PSCodeHealthReport {
     PSCodeHealth.Overall.HealthReport
 
 .NOTES
-    
+
 #>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
@@ -54,7 +54,7 @@ Function New-PSCodeHealthReport {
 
         [Parameter(Position=1, Mandatory)]
         [string]$AnalyzedPath,
-        
+
         [Parameter(Position=2, Mandatory)]
         [string[]]$Path,
 
@@ -79,7 +79,7 @@ Function New-PSCodeHealthReport {
 
         # Have to do that because even if $Psd1ScriptAnalyzerResults is Null, it adds 1 to the number of items in $AllScriptAnalyzerResults
         If ( $Psd1ScriptAnalyzerResults ) {
-            $AllScriptAnalyzerResults = ($FunctionHealthRecord.ScriptAnalyzerResultDetails | Where-Object { $_ }) + $Psd1ScriptAnalyzerResults
+            $AllScriptAnalyzerResults = @($FunctionHealthRecord.ScriptAnalyzerResultDetails | Where-Object { $_ }) + $Psd1ScriptAnalyzerResults
         }
         Else {
             $AllScriptAnalyzerResults = ($FunctionHealthRecord.ScriptAnalyzerResultDetails | Where-Object { $_ })

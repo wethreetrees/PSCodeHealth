@@ -372,6 +372,101 @@ Describe 'New-PSCodeHealthReport' {
                 $Result.FunctionHealthRecords | Should Be $FunctionHealthRecord
             }
         }
+        Context 'The FunctionHealthRecord parameter contains 1 finding and there is a manifest with findings' {
+
+            $FunctionHealthRecord = $Mocks.'New-FunctionHealthRecord'.'Single1Finding' | Where-Object { $_ }
+            $FunctionHealthRecord[0].psobject.TypeNames.Insert(0, 'PSCodeHealth.Function.HealthRecord')
+            $Null = $Path.Add((Get-ChildItem -Path "$($PSScriptRoot)\..\..\TestData\ManifestWithFindings.psd1").FullName)
+
+            $Result = New-PSCodeHealthReport -ReportTitle 'Any' -AnalyzedPath 'C:\Any' -Path $Path -TestsPath $TestsPath -FunctionHealthRecord $FunctionHealthRecord
+
+            It 'Should not throw' {
+                { New-PSCodeHealthReport -ReportTitle 'Any' -AnalyzedPath 'C:\Any' -Path $Path -TestsPath $TestsPath -FunctionHealthRecord $FunctionHealthRecord } |
+                Should Not Throw
+            }
+            It 'Should return only 1 object' {
+                ($Result | Measure-Object).Count | Should Be 1
+            }
+            It 'Should return an object of the type [PSCodeHealth.Overall.HealthReport]' {
+                $Result | Should BeOfType [PSCustomObject]
+                ($Result | Get-Member).TypeName[0] | Should Be 'PSCodeHealth.Overall.HealthReport'
+            }
+            It 'Should return an object with the expected property "ReportTitle"' {
+                $Result.ReportTitle | Should Be 'Any'
+            }
+            It 'Should return an object with the expected property "ReportDate"' {
+                $Result.ReportDate | Should Match '^\d{4}\-\d{2}\-\d{2}\s\d{2}'
+            }
+            It 'Should return an object with the expected property "AnalyzedPath"' {
+                $Result.AnalyzedPath | Should Be 'C:\Any'
+            }
+            It 'Should return an object with the expected property "Files"' {
+                $Result.Files | Should Be 4
+            }
+            It 'Should return an object with the expected property "Functions"' {
+                $Result.Functions | Should Be 1
+            }
+            It 'Should return an object with the expected property "LinesOfCodeTotal"' {
+                $Result.LinesOfCodeTotal | Should Be 101
+            }
+            It 'Should return an object with the expected property "LinesOfCodeAverage"' {
+                $Result.LinesOfCodeAverage | Should Be 101
+            }
+            It 'Should return an object with the expected property "ScriptAnalyzerFindingsTotal"' {
+                $Result.ScriptAnalyzerFindingsTotal | Should Be 4
+            }
+            It 'Should return an object with the expected property "ScriptAnalyzerErrors"' {
+                $Result.ScriptAnalyzerErrors | Should Be 0
+            }
+            It 'Should return an object with the expected property "ScriptAnalyzerWarnings"' {
+                $Result.ScriptAnalyzerWarnings | Should Be 4
+            }
+            It 'Should return an object with the expected property "ScriptAnalyzerInformation"' {
+                $Result.ScriptAnalyzerInformation | Should Be 0
+            }
+            It 'Should return an object with the expected property "ScriptAnalyzerFindingsAverage"' {
+                $Result.ScriptAnalyzerFindingsAverage | Should Be 1
+            }
+            It 'Should return an object with the expected property "FunctionsWithoutHelp"' {
+                $Result.FunctionsWithoutHelp | Should Be 0
+            }
+            It 'Should return an object with the expected property "NumberOfTests"' {
+                $Result.NumberOfTests | Should Be 0
+            }
+            It 'Should return an object with the expected property "NumberOfFailedTests"' {
+                $Result.NumberOfFailedTests | Should Be 0
+            }
+            It 'Should return an object with the expected property "FailedTestsDetails"' {
+                $Result.FailedTestsDetails | Should BeNullOrEmpty
+            }
+            It 'Should return an object with the expected property "NumberOfPassedTests"' {
+                $Result.NumberOfPassedTests | Should Be 0
+            }
+            It 'Should return an object with the expected property "TestsPassRate"' {
+                $Result.TestsPassRate | Should Be 0
+            }
+            It 'Should return an object with the expected property "TestCoverage"' {
+                $Result.TestCoverage | Should Be 0
+            }
+            It 'Should return an object with the expected property "CommandsMissedTotal"' {
+                $Result.CommandsMissedTotal | Should Be 3
+            }
+            It 'Should return an object with the expected property "ComplexityAverage"' {
+                $Result.ComplexityAverage | Should Be 19
+            }
+            It 'Should return an object with the expected property "ComplexityHighest"' {
+                $Result.ComplexityHighest | Should Be 19
+            }
+            It 'Should return an object with the expected property "NestingDepthAverage"' {
+                $Result.NestingDepthAverage | Should Be 5
+            }
+            It 'Should return an object with the expected property "NestingDepthHighest"' {
+                $Result.NestingDepthHighest | Should Be 5
+            }
+            It 'Should return an object with the expected property "FunctionHealthRecords"' {
+                $Result.FunctionHealthRecords | Should Be $FunctionHealthRecord
+            }
+        }
         Context 'The Path parameter contains only a .psd1 file' {
 
             $Psd1 = (Get-ChildItem -Path "$($PSScriptRoot)\..\..\TestData\ManifestWithFindings.psd1").FullName
