@@ -52,10 +52,12 @@ RequiredModules = @(
     @{
         ModuleName = 'Pester'
         ModuleVersion = '4.10.1'
+        MaximumVersion = '4.99.99'
     },
     @{
         ModuleName = 'PSScriptAnalyzer'
         ModuleVersion= '1.19.0'
+        MaximumVersion= '1.19.0'
     }
 )
 # Assemblies that must be loaded prior to importing this module
